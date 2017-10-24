@@ -8,7 +8,6 @@ defmodule Shield.Policy.User.RecoverPassword do
   @repo Application.get_env(:authable, :repo)
   @user Application.get_env(:authable, :resource_owner)
   @token_store Application.get_env(:authable, :token_store)
-  @front_end Application.get_env(:shield, :front_end)
   @reset_token_timeout 3600
 
   @doc """
@@ -49,9 +48,11 @@ defmodule Shield.Policy.User.RecoverPassword do
     do: {:error, opts}
 
   defp deliver_email(%{"user" => user, "token" => token} = params) do
-    recover_password_url = String.replace((Map.get(@front_end, :base) <>
-      Map.get(@front_end, :reset_password_path)), "{{reset_token}}",
-      token.value)
+    front_base = Shield.GetConfig.get_env(:shield, [:front_end, :base])
+    front_reset_path = Shield.GetConfig.get_env(:shield, [:front_end, :reset_password_path])
+    recover_password_url = String.replace(
+      (front_base <> front_reset_path),
+      "{{reset_token}}", token.value)
     EmailChannel.deliver([user.email], :recover_password,
       %{identity: user.email, recover_password_url: recover_password_url})
     params
