@@ -48,13 +48,13 @@ defmodule Shield.Policy.User.RecoverPassword do
   defp create_reset_token({:error, {_status, _errors} = opts}),
     do: {:error, opts}
 
-  defp deliver_email(%{"user" => user, "token" => token} = params) do
+  defp deliver_email({:ok, %{"user" => user, "token" => token} = params}) do
     recover_password_url = String.replace((Map.get(@front_end, :base) <>
       Map.get(@front_end, :reset_password_path)), "{{reset_token}}",
       token.value)
     EmailChannel.deliver([user.email], :recover_password,
       %{identity: user.email, recover_password_url: recover_password_url})
-    params
+    {:ok, params}
   end
   defp deliver_email({:error, {_status, _errors} = opts}),
     do: {:error, opts}
