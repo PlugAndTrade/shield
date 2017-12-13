@@ -64,8 +64,8 @@ defmodule Shield.Arm.Confirmable do
     })
     case @repo.insert(changeset) do
       {:ok, token} ->
-        front_end_base = Shield.GetConfig.get_env(:shield, [:front_end, :base])
-        front_end_confirmation_path = Shield.GetConfig.get_env(:shield, [:front_end, :confirmation_path])
+        front_end_base = Shield.Config.front_end_base()
+        front_end_confirmation_path = Shield.Config.front_end_confirmation_path()
         confirmation_url = String.replace(
           front_end_base <> front_end_confirmation_path,
           "{{confirmation_token}}", token.value)

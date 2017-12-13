@@ -1,26 +1,30 @@
 defmodule Shield.Config do
-  def get_env(config, [ key | [ _ | _ ] = keys ]) do
+  def front_end_base(), do: get_env(:shield, [:front_end, :base])
+  def front_end_confirmation_path(), do: get_env(:shield, [:front_end, :confirmation_path])
+  def front_end_reset_password_path(), do: get_env(:shield, [:front_end, :reset_password_path])
+
+  defp get_env(config, [ key | [ _ | _ ] = keys ]) do
     config
       |> get_env(key)
       |> get_env(keys)
   end
 
-  def get_env(config, [ key ]) do
+  defp get_env(config, [ key ]) do
     config
       |> get_env(key)
   end
 
-  def get_env(_, []) do
+  defp get_env(_, []) do
     raise ArgumentError, message: "Key list may not be empty"
   end
 
-  def get_env(config, key) when is_atom(config) do
+  defp get_env(config, key) when is_atom(config) do
     config
       |> Application.get_env(key)
       |> get_value()
   end
 
-  def get_env(config, key) when is_map(config) do
+  defp get_env(config, key) when is_map(config) do
     config
       |> Map.get(key)
       |> get_value()
