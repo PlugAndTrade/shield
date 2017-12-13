@@ -1,11 +1,13 @@
 defmodule Shield.Config.ConfigTest do
   use ExUnit.Case, async: true
 
+  alias Shield.Config
+
   describe "front_end" do
     test "base" do
       test_config(
         :front_end,
-        &Shield.Config.front_end_base/0,
+        &Config.front_end_base/0,
         &(%{base: &1}),
         "front_end_base_test_value",
         "front_end_base_test_default_value",
@@ -16,7 +18,7 @@ defmodule Shield.Config.ConfigTest do
     test "confirmation_path" do
       test_config(
         :front_end,
-        &Shield.Config.front_end_confirmation_path/0,
+        &Config.front_end_confirmation_path/0,
         &(%{confirmation_path: &1}),
         "front_end_confirmation_path_test_value",
         "front_end_confirmation_path_test_default_value",
@@ -27,7 +29,7 @@ defmodule Shield.Config.ConfigTest do
     test "reset_password_path" do
       test_config(
         :front_end,
-        &Shield.Config.front_end_reset_password_path/0,
+        &Config.front_end_reset_password_path/0,
         &(%{reset_password_path: &1}),
         "front_end_reset_password_path_test_value",
         "front_end_reset_password_path_test_default_value",

@@ -6,6 +6,7 @@ defmodule Shield.Arm.Confirmable do
   import Ecto.Query
   import Plug.Conn
   alias Shield.Notifier.Channel.Email, as: EmailChannel
+  alias Shield.Config
 
   @behaviour Shield.Arm
   @renderer Application.get_env(:authable, :renderer)
@@ -64,8 +65,8 @@ defmodule Shield.Arm.Confirmable do
     })
     case @repo.insert(changeset) do
       {:ok, token} ->
-        front_end_base = Shield.Config.front_end_base()
-        front_end_confirmation_path = Shield.Config.front_end_confirmation_path()
+        front_end_base = Config.front_end_base()
+        front_end_confirmation_path = Config.front_end_confirmation_path()
         confirmation_url = String.replace(
           front_end_base <> front_end_confirmation_path,
           "{{confirmation_token}}", token.value)

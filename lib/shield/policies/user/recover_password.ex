@@ -4,6 +4,7 @@ defmodule Shield.Policy.User.RecoverPassword do
   """
 
   alias Shield.Notifier.Channel.Email, as: EmailChannel
+  alias Shield.Config
 
   @repo Application.get_env(:authable, :repo)
   @user Application.get_env(:authable, :resource_owner)
@@ -48,8 +49,8 @@ defmodule Shield.Policy.User.RecoverPassword do
     do: {:error, opts}
 
   defp deliver_email({:ok, %{"user" => user, "token" => token} = params}) do
-    front_base = Shield.Config.front_end_base()
-    front_reset_path = Shield.Config.front_end_reset_password_path()
+    front_base = Config.front_end_base()
+    front_reset_path = Config.front_end_reset_password_path()
     recover_password_url = String.replace(
       (front_base <> front_reset_path),
       "{{reset_token}}", token.value)
