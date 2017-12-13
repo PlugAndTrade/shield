@@ -3,19 +3,8 @@ defmodule Shield.Config do
   def front_end_confirmation_path(), do: get_env(:shield, [:front_end, :confirmation_path])
   def front_end_reset_password_path(), do: get_env(:shield, [:front_end, :reset_password_path])
 
-  defp get_env(config, [ key | [ _ | _ ] = keys ]) do
-    config
-      |> get_env(key)
-      |> get_env(keys)
-  end
-
-  defp get_env(config, [ key ]) do
-    config
-      |> get_env(key)
-  end
-
-  defp get_env(_, []) do
-    raise ArgumentError, message: "Key list may not be empty"
+  defp get_env(config, [ first_key | keys ]) do
+    Enum.reduce(keys, get_env(config, first_key), &get_env(&2, &1))
   end
 
   defp get_env(config, key) when is_atom(config) do
