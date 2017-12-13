@@ -1,4 +1,4 @@
-defmodule Shield.GetConfig do
+defmodule Shield.Config do
   def get_env(config, [ key | [ _ | _ ] = keys ]) do
     config
       |> get_env(key)
@@ -29,5 +29,4 @@ defmodule Shield.GetConfig do
   defp get_value({:system, var, default}), do: System.get_env(var) || default
   defp get_value({:system, var}), do: System.get_env(var)
   defp get_value(value), do: value
-
 end
